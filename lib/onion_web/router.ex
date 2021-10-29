@@ -26,6 +26,13 @@ defmodule OnionWeb.Router do
     live "/demo", Demo
   end
 
+  scope "/", OnionWeb do
+    pipe_through [:browser, :redirect_if_user_is_authenticated]
+
+    get "/users/register_company", UserRegistrationController, :new_company
+    post "/users/register_company", UserRegistrationController, :create_company
+  end
+
   # Other scopes may use custom stacks.
   # scope "/api", OnionWeb do
   #   pipe_through :api
@@ -95,7 +102,7 @@ defmodule OnionWeb.Router do
   if Mix.env() == :dev do
     scope "/" do
       pipe_through :browser
-      surface_catalogue "/catalogue"
+      surface_catalogue("/catalogue")
     end
   end
 end

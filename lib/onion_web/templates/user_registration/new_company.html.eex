@@ -1,0 +1,38 @@
+
+<div class="flex items-center justify-between">
+  <div class="">
+    <div class="header">Register Organisation</div>
+  </div>
+  <div>
+    <img
+      src="<%= Routes.static_path(@conn, "/images/register.svg") %>"
+      alt="Add User"
+      class="w-40 h-40"
+    />
+  </div>
+</div>
+
+<%= form_for @changeset, Routes.user_registration_path(@conn, :create_company), fn f -> %>
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger">
+      <p>Oops, something went wrong! Please check the errors below.</p>
+    </div>
+  <% end %>
+
+  <%= inputs_for f, :organisation, fn o -> %>
+    <%= input o, :name, label_text: "Organisation Name" %>
+  <% end %>
+
+  <%= input f, :first_name %>
+  <%= input f, :last_name %>
+  <%= input f, :email %>
+  <%= input f, :password %>
+
+  <%= my_submit "Register" %>
+
+<% end %>
+
+<p class="px-3 mb-8 mt-8 md:mb-0 flex-grid">
+  <%= link "Log in", to: Routes.user_session_path(@conn, :new), class: "text-indigo-500 hover:text-indigo-700 focus:outline-none pt-2" %> |
+  <%= link "Forgot your password?", to: Routes.user_reset_password_path(@conn, :new), class: "text-indigo-500 hover:text-indigo-700 focus:outline-none pt-2" %>
+</p>

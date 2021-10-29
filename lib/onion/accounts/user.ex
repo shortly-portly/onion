@@ -2,11 +2,16 @@ defmodule Onion.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @derive {Inspect, except: [:password]}
   schema "users" do
     field :email, :string
-    field :password, :string, virtual: true, redact: true
-    field :hashed_password, :string, redact: true
+    field :password, :string, virtual: true
+    field :hashed_password, :string
     field :confirmed_at, :naive_datetime
+    field :first_name, :string
+    field :last_name, :string
+
+    belongs_to :organisation, Onion.Organisations.Organisation
 
     timestamps()
   end
@@ -30,9 +35,29 @@ defmodule Onion.Accounts.User do
   """
   def registration_changeset(user, attrs, opts \\ []) do
     user
-    |> cast(attrs, [:email, :password])
+    |> cast(attrs, [:email, :password, :first_name, :last_name, :organisation_id])
+    |> validate_required([:first_name, :last_name, :organisation_id])
     |> validate_email()
     |> validate_password(opts)
+    |> foreign_key_constraint(:organisation_id,
+      name: :users_organisation_id_fkey
+    )
+  end
+
+  @doc """
+  A user changeset for registering an organisation.
+
+  """
+  def organisation_registration_changeset(user, attrs, opts \\ []) do
+    user
+    |> cast(attrs, [:email, :password, :first_name, :last_name])
+    |> validate_required([:first_name, :last_name])
+    |> validate_email()
+    |> validate_password(opts)
+    |> cast_assoc(:organisation,
+      with: &Onion.Organisations.Organisation.changeset/2,
+      required: true
+    )
   end
 
   defp validate_email(changeset) do
@@ -47,7 +72,7 @@ defmodule Onion.Accounts.User do
   defp validate_password(changeset, opts) do
     changeset
     |> validate_required([:password])
-    |> validate_length(:password, min: 12, max: 72)
+    |> validate_length(:password, min: 12, max: 80)
     # |> validate_format(:password, ~r/[a-z]/, message: "at least one lower case character")
     # |> validate_format(:password, ~r/[A-Z]/, message: "at least one upper case character")
     # |> validate_format(:password, ~r/[!?@#$%^&*_0-9]/, message: "at least one digit or punctuation character")
@@ -60,8 +85,6 @@ defmodule Onion.Accounts.User do
 
     if hash_password? && password && changeset.valid? do
       changeset
-      # If using Bcrypt, then further validate it is at most 72 bytes long
-      |> validate_length(:password, max: 72, count: :bytes)
       |> put_change(:hashed_password, Bcrypt.hash_pwd_salt(password))
       |> delete_change(:password)
     else
@@ -84,6 +107,15 @@ defmodule Onion.Accounts.User do
     end
   end
 
+  @spec password_changeset(
+          {map, map}
+          | %{
+              :__struct__ => atom | %{:__changeset__ => map, optional(any) => any},
+              optional(atom) => any
+            },
+          :invalid | %{optional(:__struct__) => none, optional(atom | binary) => any},
+          keyword
+        ) :: Ecto.Changeset.t()
   @doc """
   A user changeset for changing the password.
 

@@ -40,6 +40,7 @@ defmodule OnionWeb do
       # Include shared imports and aliases for views
       unquote(view_helpers())
       import Surface
+      import OnionWeb.InputHelpers
     end
   end
 

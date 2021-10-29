@@ -4,8 +4,9 @@ defmodule Onion.Accounts do
   """
 
   import Ecto.Query, warn: false
-  alias Onion.Repo
 
+  alias Ecto.Multi
+  alias Onion.Repo
   alias Onion.Accounts.{User, UserToken, UserNotifier}
 
   ## Database getters
@@ -81,6 +82,28 @@ defmodule Onion.Accounts do
   end
 
   @doc """
+  Registers an organisation which consists of the organisation details and an initial user.
+  Create a default role of "Admin" for the organisation.
+
+  ## Examples
+
+      iex> register_organisation(%{field: value})
+      {:ok, %User{}}
+
+      iex> register_organisation(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+  """
+  def register_organisation(attrs) do
+    Multi.new()
+    |> Multi.insert(:org_user, User.organisation_registration_changeset(%User{}, attrs))
+    # |> Multi.run(:role, fn _repo, %{org_user: user} ->
+    #  Roles.create_role(%{name: "Admin", organisation_id: user.organisation_id})
+    # end)
+    # |> Multi.run(:role_right, &create_rights_for_admin(&1, &2))
+    |> Repo.transaction()
+  end
+
+  @doc """
   Returns an `%Ecto.Changeset{}` for tracking user changes.
 
   ## Examples
@@ -91,6 +114,19 @@ defmodule Onion.Accounts do
   """
   def change_user_registration(%User{} = user, attrs \\ %{}) do
     User.registration_changeset(user, attrs, hash_password: false)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking organisation changes.
+
+  ## Examples
+
+      iex> change_organisation_registration(user)
+      %Ecto.Changeset{data: %User{}}
+
+  """
+  def change_organisation_registration(%User{} = user, attrs \\ %{}) do
+    User.organisation_registration_changeset(user, attrs, hash_password: false)
   end
 
   ## Settings
