@@ -54,12 +54,14 @@ config :onion, OnionWeb.Endpoint,
 
 # Watch static and templates for browser reloading.
 config :onion, OnionWeb.Endpoint,
+  reloadable_compilers: [:gettext, :elixir, :surface],
   live_reload: [
     patterns: [
       ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
-      ~r"lib/onion_web/(live|views)/.*(ex)$",
-      ~r"lib/onion_web/templates/.*(eex)$"
+      ~r"lib/onion_web/(live|views|components)/.*(ex|sface|js)$",
+      ~r"lib/onion_web/templates/.*(eex)$",
+      ~r"priv/catalogue/.*(ex)$"
     ]
   ]
 

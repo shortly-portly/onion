@@ -1,6 +1,8 @@
 defmodule OnionWeb.Router do
   use OnionWeb, :router
 
+  import Surface.Catalogue.Router
+
   import OnionWeb.UserAuth
 
   pipeline :browser do
@@ -21,6 +23,7 @@ defmodule OnionWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
+    live "/demo", Demo
   end
 
   # Other scopes may use custom stacks.
@@ -87,5 +90,12 @@ defmodule OnionWeb.Router do
     post "/users/confirm", UserConfirmationController, :create
     get "/users/confirm/:token", UserConfirmationController, :edit
     post "/users/confirm/:token", UserConfirmationController, :update
+  end
+
+  if Mix.env() == :dev do
+    scope "/" do
+      pipe_through :browser
+      surface_catalogue "/catalogue"
+    end
   end
 end
