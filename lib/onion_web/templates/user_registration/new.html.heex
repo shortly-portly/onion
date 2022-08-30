@@ -1,4 +1,15 @@
-<h1>Register</h1>
+<div class="flex items-center justify-between">
+  <div class="">
+    <div class="header">New User</div>
+  </div>
+  <div>
+    <img
+      src={Routes.static_path(@conn, "/images/register.svg")}
+      alt="Add User"
+      class="w-40 h-40"
+    />
+  </div>
+</div>
 
 <.form let={f} for={@changeset} action={Routes.user_registration_path(@conn, :create)}>
   <%= if @changeset.action do %>
@@ -7,20 +18,23 @@
     </div>
   <% end %>
 
-  <%= label f, :email %>
-  <%= email_input f, :email, required: true %>
-  <%= error_tag f, :email %>
+  <div class="mb-8">
+    <%= label f, :email, class: "label" %>
+    <%= email_input f, :email, required: true, class: "input" %>
+  </div>
 
-  <%= label f, :password %>
-  <%= password_input f, :password, required: true %>
-  <%= error_tag f, :password %>
+
+  <div class="mb-8">
+    <%= label f, :password, class: "label" %>
+    <%= password_input f, :password, required: true, class: "input" %>
+  </div>
 
   <div>
-    <%= submit "Register" %>
+    <%= submit "Register", class: "submit" %>
   </div>
 </.form>
 
-<p>
-  <%= link "Log in", to: Routes.user_session_path(@conn, :new) %> |
-  <%= link "Forgot your password?", to: Routes.user_reset_password_path(@conn, :new) %>
+<p class="py-5">
+  <%= link "Log in User", to: Routes.user_session_path(@conn, :new), class: "link" %> |
+  <%= link "Forgot your password?", to: Routes.user_reset_password_path(@conn, :new), class: "link" %>
 </p>

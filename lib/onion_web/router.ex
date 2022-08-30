@@ -19,8 +19,6 @@ defmodule OnionWeb.Router do
 
   scope "/", OnionWeb do
     pipe_through :browser
-
-    get "/", PageController, :index
   end
 
   # Other scopes may use custom stacks.
@@ -74,6 +72,7 @@ defmodule OnionWeb.Router do
 
   scope "/", OnionWeb do
     pipe_through [:browser, :require_authenticated_user]
+    get "/", PageController, :index
 
     get "/users/settings", UserSettingsController, :edit
     put "/users/settings", UserSettingsController, :update

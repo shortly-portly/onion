@@ -110,6 +110,9 @@ defmodule OnionWeb.UserAuth do
 
   @doc """
   Used for routes that require the user to not be authenticated.
+
+  Add a base layout as unauthenticated users won't have access to the 
+  hamburger menu or top nav menu.
   """
   def redirect_if_user_is_authenticated(conn, _opts) do
     if conn.assigns[:current_user] do
@@ -118,6 +121,7 @@ defmodule OnionWeb.UserAuth do
       |> halt()
     else
       conn
+      |> put_root_layout(:base)
     end
   end
 

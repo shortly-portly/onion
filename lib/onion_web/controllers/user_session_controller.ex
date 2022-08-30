@@ -5,7 +5,8 @@ defmodule OnionWeb.UserSessionController do
   alias OnionWeb.UserAuth
 
   def new(conn, _params) do
-    render(conn, "new.html", error_message: nil)
+    conn
+    |> render("new.html", error_message: nil)
   end
 
   def create(conn, %{"user" => user_params}) do
