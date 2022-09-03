@@ -97,6 +97,7 @@ defmodule OnionWeb do
 
       import OnionWeb.ErrorHelpers
       import OnionWeb.Gettext
+      import OnionWeb.InputHelpers
       alias OnionWeb.Router.Helpers, as: Routes
     end
   end

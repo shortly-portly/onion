@@ -18,25 +18,11 @@
     </div>
   <% end %>
 
-  <div class="mb-8">
-    <%= label f, :email, class: "label" %>
-    <%= email_input f, :email, required: true, class: "input" %>
-  </div>
+  <%= input f, :email %>
+  <%= input f, :password %>
+  <%= my_checkbox f, :remember_me, label_text: "Keep me logged in for 60 days" %> 
 
-
-  <div class="mb-8">
-    <%= label f, :password, class: "label" %>
-    <%= password_input f, :password, required: true, class: "input" %>
-  </div>
-
-  <div class="mb-8">
-    <%= label f, :remember_me, "Keep me logged in for 60 days", class: "tracking-wide" %>
-    <%= checkbox f, :remember_me, class: "ml-10" %>
-  </div>
-
-  <div>
-    <%= submit "Log in", class: "submit" %>
-  </div>
+  <%= my_submit "Log in" %>
 
 </.form>
 <p class="py-5">

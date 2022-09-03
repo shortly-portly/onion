@@ -18,20 +18,10 @@
     </div>
   <% end %>
 
-  <div class="mb-8">
-    <%= label f, :email, class: "label" %>
-    <%= email_input f, :email, required: true, class: "input" %>
-  </div>
+  <%= input f, :email %>
+  <%= input f, :password %>
 
-
-  <div class="mb-8">
-    <%= label f, :password, class: "label" %>
-    <%= password_input f, :password, required: true, class: "input" %>
-  </div>
-
-  <div>
-    <%= submit "Register", class: "submit" %>
-  </div>
+  <%= my_submit "Register" %>
 </.form>
 
 <p class="py-5">

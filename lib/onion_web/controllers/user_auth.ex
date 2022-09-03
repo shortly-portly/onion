@@ -121,7 +121,7 @@ defmodule OnionWeb.UserAuth do
       |> halt()
     else
       conn
-      |> put_root_layout(:base)
+      |> put_root_layout({OnionWeb.LayoutView, :base})
     end
   end
 
